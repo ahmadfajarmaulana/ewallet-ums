@@ -1,1 +1,1 @@
-# ewallet-ums
+# ewallet-ums (User Management Service)
