@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"ewallet-ums/cmd/proto/tokenvalidation"
 	"ewallet-ums/helpers"
 	"log"
 	"net"
@@ -10,16 +11,16 @@ import (
 )
 
 func ServeGRPC() {
-	lis, err := net.Listen("tcp", ":"+helpers.GetEnv("GRPC_PORT", "7000"))
-
-	if err != nil {
-		log.Fatal("failed to listen grpc port: ", err)
-	}
-
+	dependency := dependencyInject()
 	s := grpc.NewServer()
 
 	//list method
-	// pb.ExampleMethod(s, &grpc...)
+	tokenvalidation.RegisterTokenValidationServer(s, dependency.TokenValidationApi)
+
+	lis, err := net.Listen("tcp", ":"+helpers.GetEnv("GRPC_PORT", "7000"))
+	if err != nil {
+		log.Fatal("failed to listen grpc port: ", err)
+	}
 
 	logrus.Info("start listen grpc on port :" + helpers.GetEnv("GRPC_PORT", "7000"))
 	if err := s.Serve(lis); err != nil {

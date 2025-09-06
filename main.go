@@ -12,6 +12,7 @@ func main() {
 
 	helpers.SetupMySQL()
 
-	cmd.ServeHTTP()
 	go cmd.ServeGRPC()
+
+	cmd.ServeHTTP()
 }
